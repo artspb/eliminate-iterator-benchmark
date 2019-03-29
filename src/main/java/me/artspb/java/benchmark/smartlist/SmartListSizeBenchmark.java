@@ -1,6 +1,7 @@
 package me.artspb.java.benchmark.smartlist;
 
 import com.intellij.util.SmartList;
+import com.intellij.util.SmartListImproved;
 import org.openjdk.jmh.annotations.*;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class SmartListSizeBenchmark {
 
     private String[] strings;
     private List<String> smartList;
+    private List<String> smartListImproved;
     private List<String> arrayList;
     private List<String> factoryList;
 
@@ -27,6 +29,7 @@ public class SmartListSizeBenchmark {
     public void init() {
         strings = Utils.randomStrings(size);
         smartList = Utils.fill(new SmartList<>(), size);
+        smartListImproved = Utils.fill(new SmartListImproved<>(), size);
         arrayList = Utils.fill(new ArrayList<>(), size);
         factoryList = Utils.fillFactory(size);
     }
@@ -44,6 +47,16 @@ public class SmartListSizeBenchmark {
     public int smartList_fori() {
         int sum = 0;
         final List<String> list = smartList;
+        for (int i = 0; i < list.size(); ++i) {
+            sum += list.get(i).length();
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public int smartListImproved_fori() {
+        int sum = 0;
+        final List<String> list = smartListImproved;
         for (int i = 0; i < list.size(); ++i) {
             sum += list.get(i).length();
         }
@@ -74,6 +87,16 @@ public class SmartListSizeBenchmark {
     public int smartList_iter() {
         int sum = 0;
         final List<String> list = smartList;
+        for (final String s : list) {
+            sum += s.length();
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public int smartListImproved_iter() {
+        int sum = 0;
+        final List<String> list = smartListImproved;
         for (final String s : list) {
             sum += s.length();
         }
